@@ -10,6 +10,7 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
+    background-color: black;
 }
 
 /* Ảnh nền */
@@ -46,12 +47,27 @@ html,body{
     font-size:20px;
     cursor:pointer;
 }
-</style>
 
+/* Text overlay */
+#text-overlay {
+    position: absolute;
+    bottom: 10%; /* Vị trí text (bạn có thể điều chỉnh tùy ý) */
+    left: 5%;
+    color: white;
+    font-size: 40px;
+    font-family: sans-serif;
+    z-index: 3;
+    opacity: 0; /* Ẩn lúc đầu */
+    transition: opacity 0.5s ease-in-out; /* Hiệu ứng mượt */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+</style>
 </head>
 <body>
 
 <img id="bg" src="./bg.png" alt="Background">
+
+<div id="text-overlay">Dẫn chương trình Ngọc Huy</div>
 
 <video id="myVideo" muted playsinline preload="auto">
     <source src="./output.webm" type="video/webm">
@@ -63,22 +79,29 @@ html,body{
 
 <script>
 function playVideo(){
-    const video=document.getElementById("myVideo");
-    const btn=document.querySelector(".btn-play");
+    const video = document.getElementById("myVideo");
+    const btn = document.querySelector(".btn-play");
+    const text = document.getElementById("text-overlay");
 
-    video.style.display="block";
-    btn.style.display="none";
+    video.style.display = "block";
+    btn.style.display = "none";
+    video.currentTime = 0;
 
-    video.currentTime=0;
-
-    video.play().catch(err=>{
+    video.play().catch(err => {
         console.log(err);
     });
+
+    // Delay 1.5s (1500ms) để hiện text
+    setTimeout(() => {
+        text.style.opacity = "1";
+    }, 1500);
 }
 
-document.getElementById("myVideo").addEventListener("ended",function(){
-    this.style.display="none";
-    document.querySelector(".btn-play").style.display="block";
+document.getElementById("myVideo").addEventListener("ended", function(){
+    this.style.display = "none";
+    document.querySelector(".btn-play").style.display = "block";
+    // Ẩn text ngay khi video kết thúc
+    document.getElementById("text-overlay").style.opacity = "0";
 });
 </script>
 

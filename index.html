@@ -2,21 +2,21 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Video Lower Third</title>
+    <title>Video Overlay</title>
     <style>
-        /* Cấu hình trang cơ bản */
-        html, body {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; background-color: #000;
+        /* Reset margin và đảm bảo toàn màn hình */
+        html, body { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; background-color: #000; 
         }
 
-        /* Ảnh nền (bg.png) */
+        /* Ảnh nền */
         #bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; z-index: 1;
         }
 
-        /* Video (output.webm) */
+        /* Video */
         #myVideo {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; z-index: 2; display: none;
@@ -28,9 +28,9 @@
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 3;
             display: flex;
-            justify-content: flex-start; /* Căn trái */
-            align-items: center;         /* Căn giữa theo chiều dọc */
-            padding-left: 15%;           /* ĐIỀU CHỈNH THÔNG SỐ NÀY ĐỂ DỊCH CHỮ */
+            justify-content: flex-start;
+            align-items: center;
+            padding-left: 15%; /* Tăng/giảm số này để dịch chữ trái/phải */
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
@@ -39,7 +39,7 @@
             font-family: Arial, sans-serif;
             font-weight: bold;
             color: #ffffff;
-            font-size: 2.5vw;           /* Kích thước chữ */
+            font-size: 2.5vw;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             pointer-events: none;
             white-space: nowrap;
@@ -56,14 +56,14 @@
 </head>
 <body>
 
-    <img id="bg" src="./bg.png" alt="Background">
+    <img id="bg" src="bg.png" alt="Background">
 
     <div id="text-container">
         <div id="text-overlay">Dẫn chương trình Ngọc Huy</div>
     </div>
 
     <video id="myVideo" muted playsinline preload="auto">
-        <source src="./output.webm" type="video/webm">
+        <source src="output.webm" type="video/webm">
     </video>
 
     <button class="btn-play" onclick="playVideo()">Phát Video</button>
@@ -79,13 +79,13 @@
             video.currentTime = 0;
             video.play();
 
-            // Delay 1.5s (1500ms) để hiện text
+            // Hiển thị text sau 1.5 giây
             setTimeout(() => {
                 container.style.opacity = "1";
             }, 1500);
         }
 
-        // Reset khi video kết thúc
+        // Tự động reset khi video kết thúc
         document.getElementById("myVideo").addEventListener("ended", function(){
             this.style.display = "none";
             document.querySelector(".btn-play").style.display = "block";

@@ -2,21 +2,17 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Video Overlay</title>
+    <title>Camera Overlay</title>
     <style>
-        /* Reset margin và đảm bảo toàn màn hình */
-        html, body { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; background-color: #000; 
-        }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000; }
 
-        /* Ảnh nền */
-        #bg {
+        /* Camera background - Hiển thị feed từ cam */
+        #camera-stream {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 1;
+            object-fit: cover; z-index: 1; transform: scaleX(-1); /* Lật ngược cam như gương */
         }
 
-        /* Video */
+        /* Video Overlay */
         #myVideo {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; z-index: 2; display: none;
@@ -24,41 +20,26 @@
 
         /* Vùng chứa chữ */
         #text-container {
-            position: absolute;
-            top: 75; left: 0; width: 100%; height: 100%;
-            z-index: 3;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding-left: 50%; /* Điều chỉnh để chữ khớp với icon */
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3; display: flex; justify-content: flex-start; align-items: center;
+            padding-left: 15%; opacity: 0; transition: opacity 0.5s ease-in-out;
         }
 
         #text-overlay {
- 
-    margin-top: 75px; /* Thêm dòng này: số dương để đẩy xuống, số âm để kéo lên */
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-            color: #ffffff;
-            font-size: 2.5vw;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            pointer-events: none;
-            white-space: nowrap;
+            font-family: Arial, sans-serif; font-weight: bold; color: #ffffff;
+            font-size: 2.5vw; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none; white-space: nowrap;
         }
 
-        /* Nút Phát */
         .btn-play {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 999; padding: 20px 40px;
-            font-size: 20px; cursor: pointer;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 999; padding: 20px 40px; font-size: 20px; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <img id="bg" src="bg.png" alt="Background">
+    <video id="camera-stream" autoplay playsinline muted></video>
 
     <div id="text-container">
         <div id="text-overlay">Dẫn chương trình Ngọc Huy</div>
@@ -68,9 +49,23 @@
         <source src="output.webm" type="video/webm">
     </video>
 
-    <button class="btn-play" onclick="playVideo()">Phát Video</button>
+    <button class="btn-play" onclick="startCameraAndPlay()">Bật Camera & Phát</button>
 
     <script>
+        // Hàm bật camera
+        async function startCameraAndPlay() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const cam = document.getElementById("camera-stream");
+                cam.srcObject = stream;
+                
+                // Sau khi bật cam, bắt đầu quy trình phát video
+                playVideo();
+            } catch (err) {
+                alert("Không thể truy cập camera: " + err);
+            }
+        }
+
         function playVideo() {
             const video = document.getElementById("myVideo");
             const btn = document.querySelector(".btn-play");
@@ -81,18 +76,12 @@
             video.currentTime = 0;
             video.play();
 
-            // Hiển thị text sau 1.5 giây
-            setTimeout(() => {
-                container.style.opacity = "1";
-            }, 1500);
+            setTimeout(() => { container.style.opacity = "1"; }, 1500);
         }
 
-        // Khi video kết thúc, dừng lại ở frame cuối, không reset
         document.getElementById("myVideo").addEventListener("ended", function(){
-            this.pause(); 
-            // Không ẩn video, không hiện nút, không ẩn text
+            this.pause();
         });
     </script>
-
 </body>
 </html>

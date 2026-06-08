@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Phát Video</title>
+    <style>
+        /* Tùy chỉnh nút bấm cho đẹp */
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="playVideo()">Phát Video</button>
+
+    <video id="myVideo" width="600" controls style="display:none; margin-top: 20px;">
+        <source src="700.LowerThird.mov" type="video/quicktime">
+        Trình duyệt của bạn không hỗ trợ định dạng video này.
+    </video>
+
+    <script>
+        function playVideo() {
+            var video = document.getElementById("myVideo");
+            video.style.display = "block"; // Hiển thị video
+            video.play(); // Lệnh phát video
+        }
+    </script>
+
+</body>
+</html>

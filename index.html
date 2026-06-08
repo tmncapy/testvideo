@@ -1,22 +1,97 @@
-/* Vùng chứa chữ: Chỉnh lại để căn lề thay vì căn giữa tuyệt đối */
-#text-container {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 3;
-    display: flex;
-    justify-content: flex-start; /* Chuyển về căn lề trái */
-    align-items: center;         /* Căn giữa theo chiều dọc */
-    padding-left: 15%;           /* ĐẨY CHỮ SANG PHẢI: Điều chỉnh % này cho khớp */
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Lower Third</title>
+    <style>
+        /* Cấu hình trang cơ bản */
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; background-color: #000;
+        }
 
-#text-overlay {
-    font-family: sans-serif;
-    font-weight: bold;
-    color: #ffffff;
-    font-size: 2.5vw;           /* Điều chỉnh kích thước chữ */
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    pointer-events: none;
-    white-space: nowrap;        /* Giữ chữ trên 1 dòng */
-}
+        /* Ảnh nền (bg.png) */
+        #bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1;
+        }
+
+        /* Video (output.webm) */
+        #myVideo {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 2; display: none;
+        }
+
+        /* Vùng chứa chữ - Căn chỉnh vị trí */
+        #text-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3;
+            display: flex;
+            justify-content: flex-start; /* Căn trái */
+            align-items: center;         /* Căn giữa theo chiều dọc */
+            padding-left: 15%;           /* ĐIỀU CHỈNH THÔNG SỐ NÀY ĐỂ DỊCH CHỮ */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #text-overlay {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 2.5vw;           /* Kích thước chữ */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* Nút Phát */
+        .btn-play {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999; padding: 20px 40px;
+            font-size: 20px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <img id="bg" src="./bg.png" alt="Background">
+
+    <div id="text-container">
+        <div id="text-overlay">Dẫn chương trình Ngọc Huy</div>
+    </div>
+
+    <video id="myVideo" muted playsinline preload="auto">
+        <source src="./output.webm" type="video/webm">
+    </video>
+
+    <button class="btn-play" onclick="playVideo()">Phát Video</button>
+
+    <script>
+        function playVideo() {
+            const video = document.getElementById("myVideo");
+            const btn = document.querySelector(".btn-play");
+            const container = document.getElementById("text-container");
+
+            video.style.display = "block";
+            btn.style.display = "none";
+            video.currentTime = 0;
+            video.play();
+
+            // Delay 1.5s (1500ms) để hiện text
+            setTimeout(() => {
+                container.style.opacity = "1";
+            }, 1500);
+        }
+
+        // Reset khi video kết thúc
+        document.getElementById("myVideo").addEventListener("ended", function(){
+            this.style.display = "none";
+            document.querySelector(".btn-play").style.display = "block";
+            document.getElementById("text-container").style.opacity = "0";
+        });
+    </script>
+
+</body>
+</html>

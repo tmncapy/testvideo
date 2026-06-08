@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <title>Video với Hình nền</title>
     <style>
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
@@ -11,6 +12,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            position: relative; /* Đảm bảo con nằm chính xác */
         }
 
         #myVideo {
@@ -19,17 +21,22 @@
             min-width: 100%; min-height: 100%;
             display: none; /* Ẩn video ban đầu */
             object-fit: cover;
-            z-index: 5; /* Đảm bảo video nằm trên nền */
+            z-index: 5; /* Nằm TRÊN background */
+            /* opacity: 0.8; */ /* Thử bật opacity nếu video che quá nhiều */
         }
 
         .btn-play {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 10; /* Nút bấm luôn nằm trên cùng */
+            z-index: 10; /* Nút bấm nằm trên cùng */
             padding: 15px 30px;
             font-size: 20px;
             cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -47,12 +54,12 @@
             var video = document.getElementById("myVideo");
             var btn = document.querySelector(".btn-play");
             
-            video.style.display = "block";
-            btn.style.display = "none";
-            
+            video.style.display = "block"; // Hiển thị video
+            btn.style.display = "none";    // Ẩn nút bấm
+
             video.play().catch(error => {
                 console.error("Lỗi phát video:", error);
-                alert("Không thể phát video. Vui lòng kiểm tra file output.webm đã cùng thư mục chưa.");
+                alert("Không thể phát video.");
             });
         }
     </script>

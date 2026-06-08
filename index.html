@@ -22,7 +22,7 @@
             object-fit: cover; z-index: 2; display: none;
         }
 
-        /* Vùng chứa chữ - Căn chỉnh vị trí */
+        /* Vùng chứa chữ */
         #text-container {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -30,7 +30,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding-left: 15%; /* Tăng/giảm số này để dịch chữ trái/phải */
+            padding-left: 15%; /* Điều chỉnh để chữ khớp với icon */
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
@@ -85,11 +85,10 @@
             }, 1500);
         }
 
-        // Tự động reset khi video kết thúc
+        // Khi video kết thúc, dừng lại ở frame cuối, không reset
         document.getElementById("myVideo").addEventListener("ended", function(){
-            this.style.display = "none";
-            document.querySelector(".btn-play").style.display = "block";
-            document.getElementById("text-container").style.opacity = "0";
+            this.pause(); 
+            // Không ẩn video, không hiện nút, không ẩn text
         });
     </script>
 

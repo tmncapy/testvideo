@@ -2,51 +2,47 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Video với Hình nền</title>
     <style>
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; 
-            /* Cài đặt hình nền */
-            background-image: url('bg.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative; /* Đảm bảo con nằm chính xác */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+
+        /* Lớp hình nền */
+        #bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1; /* Nằm dưới cùng */
         }
 
+        /* Lớp video */
         #myVideo {
             position: fixed;
-            right: 0; bottom: 0;
-            min-width: 100%; min-height: 100%;
-            display: none; /* Ẩn video ban đầu */
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            z-index: 5; /* Nằm TRÊN background */
-            /* opacity: 0.8; */ /* Thử bật opacity nếu video che quá nhiều */
+            display: none; /* Ẩn cho đến khi bấm nút */
+            z-index: 2;    /* Nằm trên hình nền */
         }
 
         .btn-play {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 10; /* Nút bấm nằm trên cùng */
-            padding: 15px 30px;
+            z-index: 10;
+            padding: 20px 40px;
             font-size: 20px;
             cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
+    <img id="bg" src="bg.png" alt="Background">
+
     <button class="btn-play" onclick="playVideo()">Phát Video</button>
 
     <video id="myVideo" muted playsinline>
         <source src="output.webm" type="video/webm">
-        Trình duyệt của bạn không hỗ trợ định dạng WebM.
     </video>
 
     <script>
@@ -54,13 +50,9 @@
             var video = document.getElementById("myVideo");
             var btn = document.querySelector(".btn-play");
             
-            video.style.display = "block"; // Hiển thị video
-            btn.style.display = "none";    // Ẩn nút bấm
-
-            video.play().catch(error => {
-                console.error("Lỗi phát video:", error);
-                alert("Không thể phát video.");
-            });
+            video.style.display = "block";
+            btn.style.display = "none";
+            video.play();
         }
     </script>
 </body>

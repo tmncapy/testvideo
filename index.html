@@ -3,29 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        /* Loại bỏ khoảng trắng mặc định của trình duyệt */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* Tránh thanh cuộn xuất hiện */
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
 
         #myVideo {
             position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
+            right: 0; bottom: 0;
+            min-width: 100%; min-height: 100%;
             display: none; /* Ẩn video ban đầu */
-            object-fit: cover; /* Giữ tỷ lệ khung hình, lấp đầy màn hình */
+            object-fit: cover;
         }
 
         .btn-play {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             z-index: 10;
             padding: 15px 30px;
@@ -36,11 +26,11 @@
 </head>
 <body>
 
-    <button class="btn-play" onclick="playVideo()">Phát Video Full Size</button>
+    <button class="btn-play" onclick="playVideo()">Phát Video</button>
 
-    <video id="myVideo">
-        <source src="700.LowerThird.mov" type="video/quicktime">
-        Trình duyệt không hỗ trợ định dạng này.
+    <video id="myVideo" muted playsinline>
+        <source src="700.LowerThird.webm" type="video/webm">
+        Trình duyệt của bạn không hỗ trợ định dạng WebM.
     </video>
 
     <script>
@@ -48,9 +38,18 @@
             var video = document.getElementById("myVideo");
             var btn = document.querySelector(".btn-play");
             
-            video.style.display = "block"; // Hiển thị video
-            btn.style.display = "none";    // Ẩn nút sau khi nhấn
-            video.play();                  // Phát video
+            video.style.display = "block";
+            btn.style.display = "none";
+            
+            // Promise để bắt lỗi nếu video không tự phát được
+            var playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Video đã bắt đầu phát thành công
+                }).catch(error => {
+                    alert("Trình duyệt chặn phát video. Hãy đảm bảo bạn đã tương tác với trang web.");
+                });
+            }
         }
     </script>
 </body>

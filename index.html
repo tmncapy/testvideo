@@ -1,59 +1,86 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+<meta charset="UTF-8">
+<title>Video Overlay</title>
 
-        /* Lớp hình nền */
-        #bg {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1; /* Nằm dưới cùng */
-        }
+<style>
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
 
-        /* Lớp video */
-        #myVideo {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none; /* Ẩn cho đến khi bấm nút */
-            z-index: 2;    /* Nằm trên hình nền */
-        }
+/* Ảnh nền */
+#bg{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:1;
+}
 
-        .btn-play {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            padding: 20px 40px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-    </style>
+/* Video */
+#myVideo{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:2;
+    display:none;
+}
+
+/* Nút phát */
+.btn-play{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:999;
+    padding:20px 40px;
+    font-size:20px;
+    cursor:pointer;
+}
+</style>
+
 </head>
 <body>
 
-    <img id="bg" src="bg.png" alt="Background">
+<img id="bg" src="./bg.png" alt="Background">
 
-    <button class="btn-play" onclick="playVideo()">Phát Video</button>
+<video id="myVideo" muted playsinline preload="auto">
+    <source src="./output.webm" type="video/webm">
+</video>
 
-    <video id="myVideo" muted playsinline>
-        <source src="output.webm" type="video/webm">
-    </video>
+<button class="btn-play" onclick="playVideo()">
+    Phát Video
+</button>
 
-    <script>
-        function playVideo() {
-            var video = document.getElementById("myVideo");
-            var btn = document.querySelector(".btn-play");
-            
-            video.style.display = "block";
-            btn.style.display = "none";
-            video.play();
-        }
-    </script>
+<script>
+function playVideo(){
+    const video=document.getElementById("myVideo");
+    const btn=document.querySelector(".btn-play");
+
+    video.style.display="block";
+    btn.style.display="none";
+
+    video.currentTime=0;
+
+    video.play().catch(err=>{
+        console.log(err);
+    });
+}
+
+document.getElementById("myVideo").addEventListener("ended",function(){
+    this.style.display="none";
+    document.querySelector(".btn-play").style.display="block";
+});
+</script>
+
 </body>
 </html>
